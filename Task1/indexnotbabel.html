@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable React Table with React.createElement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .editable {
+            outline: none;
+            min-width: 100px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Editable React Table</h1>
+
+    <div id="app"></div>
+
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script>
+        const { useState } = React;
+
+        function EditableTable() {
+            const initialData = [
+                { id: 1, name: 'Onboarding Call', month1: '', month2: '', month3: '', month4: '', month5: '', month6: '' },
+                { id: 2, name: 'Google Search Console Access', month1: '', month2: '', month3: '', month4: '', month5: '', month6: '' },
+                { id: 3, name: 'Google Analytics Access', month1: '', month2: '', month3: '', month4: '', month5: '', month6: '' },
+                { id: 4, name: 'Website Access', month1: '', month2: '', month3: '', month4: '', month5: '', month6: '' },
+                { id: 5, name: 'Technical Audit', month1: '', month2: '', month3: '', month4: '', month5: '', month6: '' },
+                { id: 6, name: 'Anchor Text and Semantic Analysis', month1: '', month2: '', month3: '', month4: '', month5: '', month6: '' },
+                { id: 7, name: 'Competitor Analysis', month1: '', month2: '', month3: '', month4: '', month5: '', month6: '' },
+                { id: 8, name: 'Anchor Text and URL Mapping', month1: '', month2: '', month3: '', month4: '', month5: '', month6: '' },
+                { id: 9, name: 'Google Data Studio Report + Local Reporting Suite', month1: '', month2: '', month3: '', month4: '', month5: '', month6: '' },
+                { id: 10, name: 'Site Level Optimization', month1: '', month2: '', month3: '', month4: '', month5: '', month6: '' },
+            ];
+
+            const [data, setData] = useState(initialData);
+
+            const handleInputChange = (e, rowIndex, column) => {
+                const updatedData = [...data];
+                updatedData[rowIndex][column] = e.target.value;
+                setData(updatedData);
+            };
+
+            const handleSubmit = () => {
+                console.log('Submitted data:', data);
+                alert('Data submitted successfully!');
+            };
+
+            return React.createElement("div", null,
+                React.createElement("table", null,
+                    React.createElement("thead", null,
+                        React.createElement("tr", null,
+                            React.createElement("th", null, "Task"),
+                            React.createElement("th", null, "Month 1"),
+                            React.createElement("th", null, "Month 2"),
+                            React.createElement("th", null, "Month 3"),
+                            React.createElement("th", null, "Month 4"),
+                            React.createElement("th", null, "Month 5"),
+                            React.createElement("th", null, "Month 6")
+                        )
+                    ),
+                    React.createElement("tbody", null,
+                        data.map((row, rowIndex) =>
+                            React.createElement("tr", { key: row.id },
+                                React.createElement("td", null, row.name),
+                                React.createElement("td", null,
+                                    React.createElement("input", {
+                                        type: "text",
+                                        value: row.month1,
+                                        onChange: (e) => handleInputChange(e, rowIndex, 'month1')
+                                    })
+                                ),
+                                React.createElement("td", null,
+                                    React.createElement("input", {
+                                        type: "text",
+                                        value: row.month2,
+                                        onChange: (e) => handleInputChange(e, rowIndex, 'month2')
+                                    })
+                                ),
+                                React.createElement("td", null,
+                                    React.createElement("input", {
+                                        type: "text",
+                                        value: row.month3,
+                                        onChange: (e) => handleInputChange(e, rowIndex, 'month3')
+                                    })
+                                ),
+                                React.createElement("td", null,
+                                    React.createElement("input", {
+                                        type: "text",
+                                        value: row.month4,
+                                        onChange: (e) => handleInputChange(e, rowIndex, 'month4')
+                                    })
+                                ),
+                                React.createElement("td", null,
+                                    React.createElement("input", {
+                                        type: "text",
+                                        value: row.month5,
+                                        onChange: (e) => handleInputChange(e, rowIndex, 'month5')
+                                    })
+                                ),
+                                React.createElement("td", null,
+                                    React.createElement("input", {
+                                        type: "text",
+                                        value: row.month6,
+                                        onChange: (e) => handleInputChange(e, rowIndex, 'month6')
+                                    })
+                                )
+                            )
+                        )
+                    )
+                ),
+                React.createElement("button", { onClick: handleSubmit }, "Submit Data")
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('app')).render(
+            React.createElement(EditableTable)
+        );
+    </script>
+</body>
+
+</html>

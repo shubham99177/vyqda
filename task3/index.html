@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Data to API and Display Headers</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const App = () => {
+            const [phoneNumber, setPhoneNumber] = React.useState('');
+            const [headers, setHeaders] = React.useState(null);
+
+            const handleInputChange = (e) => {
+                setPhoneNumber(e.target.value);
+            };
+
+            const handleSubmit = async () => {
+                try {
+                    const response = await fetch('https://chimpu.online/api/post.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({ phonenumber: phoneNumber }),
+                    });
+
+                    const headersObj = {};
+                    response.headers.forEach((value, key) => {
+                        headersObj[key] = value;
+                    });
+
+                    setHeaders(headersObj);
+                } catch (error) {
+                    console.error('Error posting data:', error);
+                }
+            };
+
+            return (
+                <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+                    <h1>Post Data to API and Display Headers</h1>
+                    <div>
+                        <label>
+                            Phone Number:
+                            <input
+                                type="text"
+                                value={phoneNumber}
+                                onChange={handleInputChange}
+                                placeholder="Enter phone number"
+                                style={{ margin: '10px', padding: '5px', border: '1px solid #ccc' }}
+                            />
+                        </label>
+                        <button
+                            onClick={handleSubmit}
+                            style={{ padding: '5px 10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer' }}
+                        >
+                            Submit
+                        </button>
+                    </div>
+                    <div style={{ marginTop: '20px' }}>
+                        <h2>Response Headers</h2>
+                        {headers ? (
+                            <ul>
+                                {Object.entries(headers).map(([key, value]) => (
+                                    <li key={key}>
+                                        <strong>{key}:</strong> {value}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No headers received yet. Submit a phone number to test.</p>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
